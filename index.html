@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign in - Google Accounts</title>
-  <!-- Google Font: Roboto -->
+  <!-- Load Google Roboto Font Engine -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -14,10 +14,20 @@
   
   <style>
     body {
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     }
     
-    /* Indeterminate progress bar animations */
+    /* Chrome Auto-fill Override to prevent background color changes */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 50px white inset !important;
+        -webkit-text-fill-color: #1f1f1f !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* M3 Linear Progress Bar Animation */
     @keyframes progress-primary {
       0% { left: -35%; right: 100%; }
       60% { left: 100%; right: -90%; }
@@ -36,48 +46,54 @@
       animation-delay: 1.15s;
     }
 
-    /* Material Ripple Effect */
-    .ripple {
+    /* Material Ripple Setup */
+    .ripple-target {
       position: relative;
       overflow: hidden;
     }
-    .ripple-effect {
+    .ripple-element {
       position: absolute;
       border-radius: 50%;
-      background: rgba(11, 87, 208, 0.15);
+      background: rgba(11, 87, 208, 0.12); /* Google Blue ripple */
       transform: scale(0);
-      animation: ripple-animation 0.5s ease-out;
+      animation: ripple-drop 0.4s linear;
       pointer-events: none;
     }
-    .ripple-white .ripple-effect {
-      background: rgba(255, 255, 255, 0.3);
+    .ripple-white .ripple-element {
+      background: rgba(255, 255, 255, 0.25);
     }
-    @keyframes ripple-animation {
-      to {
+    @keyframes ripple-drop {
+      100% {
         transform: scale(4);
         opacity: 0;
       }
+    }
+
+    /* Custom Input Border Fix for Webkit */
+    .m3-input:focus {
+        padding: 15px; /* Offset the 2px border visually to prevent layout shift */
     }
   </style>
 </head>
 <body class="bg-white md:bg-[#f0f4f9] min-h-screen flex flex-col justify-between antialiased selection:bg-[#c2e7ff] text-[#1f1f1f]">
 
-  <!-- Top Flexbox / Centering Element -->
-  <div class="flex-grow flex items-start md:items-center justify-center pt-6 sm:pt-12 md:pt-0">
+  <!-- Main Viewport Centering -->
+  <div class="flex-grow flex items-start md:items-center justify-center pt-8 sm:pt-12 md:pt-0 pb-8 px-0 sm:px-6">
     
-    <!-- Main Material 3 Outer Card Frame -->
-    <div class="relative w-full max-w-[448px] md:max-w-[848px] bg-white rounded-none md:rounded-[28px] px-6 py-6 sm:px-9 sm:py-9 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-x-12 items-start min-h-auto md:min-h-[440px] overflow-visible md:shadow-none">
+    <!-- Material 3 Surface Card -->
+    <!-- Exact dimensions: 1040px max-width on large desktop, 28px radius -->
+    <div class="relative w-full max-w-[448px] lg:max-w-[1040px] bg-white rounded-none md:rounded-[28px] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12 grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-x-12 items-start min-h-auto lg:min-h-[400px] overflow-hidden md:overflow-visible shadow-none">
       
-      <!-- Top Dynamic Loading Bar (Material Style) -->
-      <div id="loading-bar" class="absolute top-0 left-0 right-0 h-1 bg-[#d3e3fd] overflow-hidden rounded-t-none md:rounded-t-[28px] hidden">
+      <!-- Top Loading Indicator -->
+      <div id="loading-bar" class="absolute top-0 left-0 right-0 h-1 bg-[#d3e3fd] overflow-hidden rounded-t-none md:rounded-t-[28px] hidden z-10">
         <div class="absolute top-0 bottom-0 left-0 bg-[#0b57d0] will-change-left animate-progress-1"></div>
         <div class="absolute top-0 bottom-0 left-0 bg-[#0b57d0] will-change-left animate-progress-2"></div>
       </div>
 
-      <!-- Left Hand Information & Identity Panel -->
-      <div class="flex flex-col justify-between h-auto md:h-full">
+      <!-- Left Column: Branding -->
+      <div class="flex flex-col justify-between h-auto lg:h-full lg:pr-10">
         <div>
-          <!-- Official Google Logo -->
+          <!-- Exact Google Logo Paths & Colors -->
           <svg class="h-[24px] w-auto mb-4 md:mb-5 select-none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -85,375 +101,338 @@
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
           </svg>
           
-          <h1 id="flow-title" class="text-[32px] font-normal text-[#1f1f1f] tracking-tight leading-10">
+          <!-- Exact M3 Typography Scale -->
+          <h1 id="flow-title" class="text-[36px] font-normal text-[#1f1f1f] leading-[44px] -tracking-[0.02em]">
             Sign in
           </h1>
-          <p id="flow-subtitle" class="text-base text-[#1f1f1f] mt-2 font-normal tracking-normal">
+          <p id="flow-subtitle" class="text-base text-[#1f1f1f] mt-3 font-normal leading-6">
             Use your Google Account
           </p>
         </div>
       </div>
 
-      <!-- Right Hand Active Step viewport -->
-      <div class="w-full overflow-hidden pt-1">
-        <div id="slider-track" class="flex w-[200%] transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]">
-          
-          <!-- STEP 1: USERNAME/EMAIL ELEMENT -->
-          <div class="w-1/2 pr-4 flex flex-col justify-between h-full">
-            <form id="email-step-form" class="space-y-4" onsubmit="handleEmailNext(event);">
-              
-              <!-- Container for field + dynamic validation styles -->
-              <div class="space-y-1.5">
+      <!-- Right Column: Interactive Track -->
+      <div class="w-full relative lg:pt-2">
+        <div class="overflow-hidden p-1 -m-1"> <!-- Padding prevents focus ring clipping -->
+          <div id="slider-track" class="flex w-[200%] transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]">
+            
+            <!-- ====== SLIDE 1: IDENTIFIER ====== -->
+            <div class="w-1/2 pr-2 flex flex-col justify-between h-full">
+              <form id="email-step-form" onsubmit="handleEmailNext(event);">
+                
                 <div class="relative w-full" id="email-field-container">
                   <input 
                     type="text" 
                     id="email-input" 
                     placeholder=" " 
-                    class="peer w-full px-4 py-[16px] text-base bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2 focus:px-[15px] focus:py-[15px]"
+                    class="m3-input peer w-full px-4 py-4 h-[56px] text-[16px] bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2"
                     autocomplete="username"
                   />
-                  <!-- Underlay label background masks outline flawlessly -->
+                  <!-- Floating Label Background Mask Technique -->
                   <label 
                     for="email-input" 
                     id="email-label"
-                    class="absolute left-3 top-[16px] text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-base
-                           peer-placeholder-shown:top-[16px] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-100
-                           peer-focus:-top-2.5 peer-focus:left-3 peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
-                           peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:scale-[0.75]"
+                    class="absolute left-3 top-4 text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-[16px]
+                           peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100
+                           peer-focus:-translate-y-[26px] peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
+                           peer-[:not(:placeholder-shown)]:-translate-y-[26px] peer-[:not(:placeholder-shown)]:scale-[0.75]"
                   >
                     Email or phone
                   </label>
                 </div>
                 
-                <!-- Active Validation Diagnostics Message -->
-                <div id="email-error-msg" class="text-xs text-[#b3261e] flex items-center gap-2 hidden">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <!-- Error Message Container -->
+                <div id="email-error-msg" class="text-[12px] text-[#b3261e] flex items-start gap-2 hidden mt-2">
+                  <svg class="w-4 h-4 flex-shrink-0 mt-[2px]" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                   </svg>
-                  <span id="error-text">Enter an email or phone number</span>
+                  <span id="error-text" class="leading-[20px]">Enter an email or phone number</span>
                 </div>
-              </div>
 
-              <div>
-                <a href="#" class="text-[#0b57d0] text-sm font-medium hover:underline inline-block">
-                  Forgot email?
-                </a>
-              </div>
+                <div class="pt-2">
+                  <a href="#" class="text-[#0b57d0] text-sm font-medium hover:bg-blue-50 py-1.5 px-2 -ml-2 rounded transition-colors inline-block">
+                    Forgot email?
+                  </a>
+                </div>
 
-              <div class="text-sm text-[#444746] pt-5 leading-[20px] font-normal tracking-normal">
-                Not your computer? Use Guest mode to sign in privately.
-                <a href="#" class="text-[#0b57d0] font-medium hover:underline inline-block whitespace-nowrap ml-0.5">
-                  Learn more
-                </a>
-              </div>
+                <div class="text-[14px] text-[#444746] pt-10 leading-[20px] font-normal">
+                  Not your computer? Use Guest mode to sign in privately.
+                  <a href="#" class="text-[#0b57d0] font-medium hover:bg-blue-50 py-1 px-1.5 -ml-1 rounded transition-colors inline-block whitespace-nowrap">
+                    Learn more
+                  </a>
+                </div>
 
-              <!-- Button Interaction Strip -->
-              <div class="flex items-center justify-between pt-8 md:pt-12 relative">
-                <!-- Dropdown Trigger Container -->
-                <div class="relative">
+                <!-- Footer Actions -->
+                <div class="flex items-center justify-between pt-10 relative">
+                  <div>
+                    <button 
+                      type="button" 
+                      id="create-account-btn"
+                      onclick="toggleCreateAccountMenu(event)"
+                      class="ripple-target text-[#0b57d0] text-[14px] font-medium tracking-[0.1px] px-3 py-[9px] -ml-3 rounded-[20px] hover:bg-[#0b57d0]/[0.08] transition duration-150"
+                    >
+                      Create account
+                    </button>
+                    <!-- Floating M3 Menu -->
+                    <div id="create-account-menu" class="absolute left-0 bottom-[52px] w-[230px] bg-white rounded-[8px] shadow-[0_4px_14px_rgba(0,0,0,0.15),0_0_2px_rgba(0,0,0,0.1)] py-2 hidden z-50">
+                      <button type="button" class="w-full text-left px-4 py-[10px] text-[14px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">For my personal use</button>
+                      <button type="button" class="w-full text-left px-4 py-[10px] text-[14px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">For my child</button>
+                      <button type="button" class="w-full text-left px-4 py-[10px] text-[14px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">For work or my business</button>
+                    </div>
+                  </div>
+
                   <button 
-                    type="button" 
-                    id="create-account-btn"
-                    onclick="toggleCreateAccountMenu(event)"
-                    class="ripple text-[#0b57d0] text-sm font-medium tracking-wide px-4 py-2.5 -ml-4 rounded-full hover:bg-[#0b57d0]/[0.08] active:bg-[#0b57d0]/[0.12] transition duration-150 inline-flex items-center gap-1"
+                    type="submit" 
+                    class="ripple-target ripple-white bg-[#0b57d0] text-white text-[14px] font-medium tracking-[0.1px] px-6 h-[40px] rounded-full hover:bg-[#0a4ebd] hover:shadow-md transition duration-150"
                   >
-                    Create account
+                    Next
                   </button>
-                  
-                  <!-- Dropdown Pop-over Context List -->
-                  <div id="create-account-menu" class="absolute left-0 bottom-12 mt-1 w-[210px] bg-white rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.15)] border border-[#e0e0e0] py-1.5 hidden z-50">
-                    <button type="button" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">For my personal use</button>
-                    <button type="button" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">For my child</button>
-                    <button type="button" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">For work or my business</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- ====== SLIDE 2: PASSWORD ====== -->
+            <div class="w-1/2 pl-2 flex flex-col justify-between h-full">
+              <form id="password-step-form" onsubmit="handlePasswordNext(event);">
+                
+                <!-- Identity Pill -->
+                <div onclick="returnToEmailStep()" class="inline-flex items-center gap-2 border border-[#747775]/40 rounded-full pl-[5px] pr-3 py-[5px] cursor-pointer hover:bg-[#1f1f1f]/[0.04] transition text-[14px] text-[#1f1f1f] mb-6 shadow-sm hover:shadow-none">
+                  <div id="user-avatar-badge" class="w-[20px] h-[20px] rounded-full flex items-center justify-center text-[11px] font-medium text-white bg-[#0b57d0]">
+                    U
+                  </div>
+                  <span id="identity-display" class="font-normal text-[#3c4043]"></span>
+                  <div class="w-4 h-4 flex items-center justify-center text-[#444746]">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
                   </div>
                 </div>
 
-                <button 
-                  type="submit" 
-                  class="ripple ripple-white bg-[#0b57d0] text-white text-sm font-medium tracking-wide px-6 py-2.5 rounded-full hover:bg-[#0a4ebd] hover:shadow-sm active:bg-[#083da1] active:shadow-none transition duration-150"
-                >
-                  Next
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- STEP 2: PASSWORD ELEMENT -->
-          <div class="w-1/2 pl-4 flex flex-col justify-between h-full">
-            <form id="password-step-form" class="space-y-4" onsubmit="handlePasswordNext(event);">
-              
-              <!-- User Identity Header Badge -->
-              <div onclick="returnToEmailStep()" class="inline-flex items-center gap-1.5 border border-[#747775]/40 rounded-full pl-1.5 pr-3 py-1 cursor-pointer hover:bg-[#1f1f1f]/[0.04] active:bg-[#1f1f1f]/[0.08] transition text-sm text-[#1f1f1f] mb-4">
-                <!-- Mini arrow left SVG -->
-                <div class="w-4 h-4 flex items-center justify-center text-[#444746]">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                  </svg>
-                </div>
-                <!-- Mini User avatar with randomized colored backdrop -->
-                <div id="user-avatar-badge" class="w-[20px] h-[20px] rounded-full flex items-center justify-center text-xs font-medium text-white shadow-sm">
-                  U
-                </div>
-                <span id="identity-display" class="font-normal text-[#3c4043]"></span>
-              </div>
-
-              <!-- Pass input outline -->
-              <div class="space-y-1.5">
                 <div class="relative w-full" id="pass-field-container">
                   <input 
                     type="password" 
                     id="password-input" 
                     placeholder=" " 
-                    class="peer w-full px-4 py-[16px] text-base bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2 focus:px-[15px] focus:py-[15px]"
+                    class="m3-input peer w-full px-4 py-4 h-[56px] text-[16px] bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2"
                     autocomplete="current-password"
                   />
                   <label 
                     for="password-input" 
                     id="password-label"
-                    class="absolute left-3 top-[16px] text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-base
-                           peer-placeholder-shown:top-[16px] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-100
-                           peer-focus:-top-2.5 peer-focus:left-3 peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
-                           peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:scale-[0.75]"
+                    class="absolute left-3 top-4 text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-[16px]
+                           peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100
+                           peer-focus:-translate-y-[26px] peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
+                           peer-[:not(:placeholder-shown)]:-translate-y-[26px] peer-[:not(:placeholder-shown)]:scale-[0.75]"
                   >
                     Enter your password
                   </label>
                 </div>
                 
-                <!-- Error Diagnostic Element for Password -->
-                <div id="password-error-msg" class="text-xs text-[#b3261e] flex items-center gap-2 hidden">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <div id="password-error-msg" class="text-[12px] text-[#b3261e] flex items-start gap-2 hidden mt-2">
+                  <svg class="w-4 h-4 flex-shrink-0 mt-[2px]" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                   </svg>
-                  <span id="password-error-text">Wrong password. Try again or click Forgot password to reset it.</span>
+                  <span id="password-error-text" class="leading-[20px]">Wrong password. Try again or click Forgot password to reset it.</span>
                 </div>
 
-                <!-- Caps Lock Warning Display -->
-                <div id="capslock-warning" class="text-xs text-[#e06000] flex items-center gap-2 hidden py-0.5">
+                <div id="capslock-warning" class="text-[12px] text-[#e06000] flex items-center gap-2 hidden mt-1">
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                   </svg>
                   <span>Caps Lock is on</span>
                 </div>
-              </div>
 
-              <!-- Interactive Show Password Input Wrap -->
-              <div class="flex items-center gap-3 pt-1 pl-0.5">
-                <input 
-                  type="checkbox" 
-                  id="show-pass-toggle" 
-                  class="w-[18px] h-[18px] rounded border-[#747775] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer" 
-                  onclick="togglePassVisibility()"
-                />
-                <label for="show-pass-toggle" class="text-sm font-normal text-[#1f1f1f] cursor-pointer select-none">Show password</label>
-              </div>
+                <!-- Custom M3 Checkbox -->
+                <div class="flex items-center gap-3 pt-3 pl-0.5">
+                  <input 
+                    type="checkbox" 
+                    id="show-pass-toggle" 
+                    class="w-[18px] h-[18px] rounded-[2px] border-[2px] border-[#444746] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer" 
+                    onclick="togglePassVisibility()"
+                  />
+                  <label for="show-pass-toggle" class="text-[14px] font-normal text-[#1f1f1f] cursor-pointer select-none">Show password</label>
+                </div>
 
-              <!-- Primary Action Deck row for Password frame -->
-              <div class="flex items-center justify-between pt-10 md:pt-16">
-                <a href="#" class="ripple text-[#0b57d0] text-sm font-medium tracking-wide px-3 py-2 -ml-3 rounded-full hover:bg-[#0b57d0]/[0.08] active:bg-[#0b57d0]/[0.12] transition duration-150">
-                  Forgot password?
-                </a>
-                <button 
-                  type="submit" 
-                  class="ripple ripple-white bg-[#0b57d0] text-white text-sm font-medium tracking-wide px-6 py-2.5 rounded-full hover:bg-[#0a4ebd] hover:shadow-sm active:bg-[#083da1] active:shadow-none transition duration-150"
-                >
-                  Next
-                </button>
-              </div>
-            </form>
+                <div class="flex items-center justify-between pt-16">
+                  <a href="#" class="ripple-target text-[#0b57d0] text-[14px] font-medium tracking-[0.1px] px-3 py-[9px] -ml-3 rounded-[20px] hover:bg-[#0b57d0]/[0.08] transition duration-150">
+                    Forgot password?
+                  </a>
+                  <button 
+                    type="submit" 
+                    class="ripple-target ripple-white bg-[#0b57d0] text-white text-[14px] font-medium tracking-[0.1px] px-6 h-[40px] rounded-full hover:bg-[#0a4ebd] hover:shadow-md transition duration-150"
+                  >
+                    Next
+                  </button>
+                </div>
+              </form>
+            </div>
+
           </div>
-
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Global Adaptive Material Alignment Footer -->
-  <footer class="w-full max-w-[448px] md:max-w-[848px] mx-auto flex flex-col sm:flex-row justify-between items-center text-xs text-[#444746] pb-4 pt-6 md:py-6 gap-4 px-6 md:px-2 relative">
+  <!-- Global Footer -->
+  <!-- Constrains to exact max width of the card -->
+  <footer class="w-full max-w-[448px] lg:max-w-[1040px] mx-auto flex flex-col sm:flex-row justify-between items-center text-[12px] text-[#444746] pb-4 pt-4 md:py-6 gap-4 px-6 md:px-6 relative bg-transparent">
     
-    <!-- Left Alignment: Lang Selection Dropdown Container -->
-    <div class="relative">
-      <div 
+    <div class="relative w-full sm:w-auto flex justify-center sm:block">
+      <button 
+        type="button"
         onclick="toggleLanguagePicker(event)" 
-        class="flex items-center gap-1 cursor-pointer hover:bg-black/[0.04] py-1.5 px-2.5 -ml-2.5 rounded-md transition select-none text-[#1f1f1f]"
+        class="flex items-center gap-[6px] cursor-pointer hover:bg-black/[0.04] py-1.5 px-2 -ml-2 rounded transition select-none"
       >
         <span id="active-lang">English (United States)</span>
-        <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+        <svg class="w-[18px] h-[18px] text-[#444746]" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M7 10l5 5 5-5z"/>
         </svg>
-      </div>
+      </button>
 
-      <!-- Language selector picker viewport list wrapper -->
-      <div id="language-picker-menu" class="absolute left-0 bottom-10 mb-1 w-[220px] bg-white rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.18)] border border-[#e0e0e0] max-h-[220px] overflow-y-auto py-1 hidden z-50">
-        <button onclick="setLanguage('English (United States)')" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">English (United States)</button>
-        <button onclick="setLanguage('Español (España)')" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">Español (España)</button>
-        <button onclick="setLanguage('Français (France)')" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">Français (France)</button>
-        <button onclick="setLanguage('Deutsch (Deutschland)')" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">Deutsch (Deutschland)</button>
-        <button onclick="setLanguage('日本語')" class="w-full text-left px-4 py-2 text-sm text-[#1f1f1f] hover:bg-[#f5f5f5] transition">日本語</button>
+      <!-- Language Selector -->
+      <div id="language-picker-menu" class="absolute left-1/2 sm:left-0 transform -translate-x-1/2 sm:translate-x-0 bottom-10 mb-1 w-[220px] bg-white rounded-[8px] shadow-[0_4px_14px_rgba(0,0,0,0.15),0_0_2px_rgba(0,0,0,0.1)] max-h-[220px] overflow-y-auto py-1 hidden z-50">
+        <button onclick="setLanguage('English (United States)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">English (United States)</button>
+        <button onclick="setLanguage('Español (España)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">Español (España)</button>
+        <button onclick="setLanguage('Français (France)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">Français (France)</button>
+        <button onclick="setLanguage('Deutsch (Deutschland)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">Deutsch (Deutschland)</button>
+        <button onclick="setLanguage('日本語')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">日本語</button>
       </div>
     </div>
 
-    <!-- Right Alignment Footer anchors -->
-    <div class="flex gap-4 sm:gap-6 text-[#444746] font-normal tracking-wide">
-      <a href="#" class="hover:underline py-1">Help</a>
-      <a href="#" class="hover:underline py-1">Privacy</a>
-      <a href="#" class="hover:underline py-1">Terms</a>
+    <div class="flex gap-6 text-[#444746] font-normal tracking-[0.1px]">
+      <a href="#" class="hover:bg-black/[0.04] py-1 px-1.5 -mx-1.5 rounded transition">Help</a>
+      <a href="#" class="hover:bg-black/[0.04] py-1 px-1.5 -mx-1.5 rounded transition">Privacy</a>
+      <a href="#" class="hover:bg-black/[0.04] py-1 px-1.5 -mx-1.5 rounded transition">Terms</a>
     </div>
   </footer>
 
-  <!-- State Operations Core Engine logic -->
   <script>
     const sliderTrack = document.getElementById('slider-track');
     const loadingBar = document.getElementById('loading-bar');
     const flowTitle = document.getElementById('flow-title');
     const flowSubtitle = document.getElementById('flow-subtitle');
     
-    // Email step nodes
+    // Core nodes
     const emailInput = document.getElementById('email-input');
     const emailContainer = document.getElementById('email-field-container');
     const emailLabel = document.getElementById('email-label');
     const emailErrorMsg = document.getElementById('email-error-msg');
-    const emailErrorText = document.getElementById('error-text');
-
-    // Password step nodes
+    
     const passwordInput = document.getElementById('password-input');
     const passwordContainer = document.getElementById('pass-field-container');
     const passwordLabel = document.getElementById('password-label');
     const passwordErrorMsg = document.getElementById('password-error-msg');
+    
+    // Profile Assets
     const capslockWarning = document.getElementById('capslock-warning');
     const identityDisplay = document.getElementById('identity-display');
     const userAvatarBadge = document.getElementById('user-avatar-badge');
-
-    // Color palette array matching Material 3 profile backgrounds
     const materialAvatarColors = ['#0b57d0', '#0f9d58', '#f4b400', '#db4437', '#673ab7', '#0097a7'];
 
-    // -------------------------------------------------------------
-    // Ripple Effect Logic Implementation
-    // -------------------------------------------------------------
-    document.querySelectorAll('.ripple').forEach(button => {
-      button.addEventListener('mousedown', function(e) {
+    // 1. Material Ripple Injector
+    document.querySelectorAll('.ripple-target').forEach(btn => {
+      btn.addEventListener('mousedown', function(e) {
         const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const circle = document.createElement('span');
+        const ripple = document.createElement('span');
         const diameter = Math.max(rect.width, rect.height);
         
-        circle.style.width = circle.style.height = `${diameter}px`;
-        circle.style.left = `${x - diameter / 2}px`;
-        circle.style.top = `${y - diameter / 2}px`;
-        circle.classList.add('ripple-effect');
+        ripple.style.width = ripple.style.height = `${diameter}px`;
+        ripple.style.left = `${e.clientX - rect.left - diameter / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - diameter / 2}px`;
+        ripple.classList.add('ripple-element');
         
-        this.appendChild(circle);
-        
-        setTimeout(() => {
-          circle.remove();
-        }, 500);
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 400);
       });
     });
 
-    // -------------------------------------------------------------
-    // Stage 1: Email Form Handler & Validation mechanics
-    // -------------------------------------------------------------
+    // 2. Email Verification Logic
     function handleEmailNext(e) {
       e.preventDefault();
       const val = emailInput.value.trim();
 
-      // Form validation diagnostics
       if (!val) {
-        setErrorState(true, "Enter an email or phone number");
+        setEmailError(true, "Enter an email or phone number");
         return;
       }
       
-      // Basic match for email formatting rules or phone lengths
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const phonePattern = /^\+?[0-9]{7,15}$/;
       if (!emailPattern.test(val) && !phonePattern.test(val)) {
-        setErrorState(true, "Couldn't find your Google Account");
+        setEmailError(true, "Couldn't find your Google Account");
         return;
       }
 
-      setErrorState(false); // clear active errors
+      setEmailError(false);
       loadingBar.classList.remove('hidden');
 
-      // Emulate server identity lookup
       setTimeout(() => {
         loadingBar.classList.add('hidden');
-        
-        // Populate profile identity display configurations
         identityDisplay.textContent = val;
         
-        // Generate random custom Avatar background
         const randomColor = materialAvatarColors[Math.floor(Math.random() * materialAvatarColors.length)];
         userAvatarBadge.style.backgroundColor = randomColor;
         userAvatarBadge.textContent = val.charAt(0).toUpperCase();
 
-        // Animate headers for password stage
         flowTitle.textContent = 'Welcome';
-        flowSubtitle.textContent = '';
+        flowSubtitle.classList.add('hidden');
         
-        // Translate view elements
         sliderTrack.classList.add('-translate-x-1/2');
-        
-        // Focus the passwords input target elegantly
         setTimeout(() => passwordInput.focus(), 400);
-      }, 700);
+      }, 600);
     }
 
-    function setErrorState(isError, msg = "") {
+    function setEmailError(isError, msg = "") {
       if (isError) {
-        emailContainer.classList.remove('border-[#747775]', 'focus-within:border-[#0b57d0]');
-        emailContainer.classList.add('border-[#b3261e]', 'border-2');
+        emailContainer.querySelector('input').classList.remove('border-[#747775]');
+        emailContainer.querySelector('input').classList.add('border-[#b3261e]');
         emailLabel.classList.add('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
-        emailErrorText.textContent = msg;
+        document.getElementById('error-text').textContent = msg;
         emailErrorMsg.classList.remove('hidden');
         emailInput.focus();
       } else {
-        emailContainer.classList.add('border-[#747775]');
-        emailContainer.classList.remove('border-[#b3261e]', 'border-2');
+        emailContainer.querySelector('input').classList.add('border-[#747775]');
+        emailContainer.querySelector('input').classList.remove('border-[#b3261e]');
         emailLabel.classList.remove('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
         emailErrorMsg.classList.add('hidden');
       }
     }
 
-    // -------------------------------------------------------------
-    // Stage 2: Password Validation & Return navigation mechanics
-    // -------------------------------------------------------------
+    // 3. Password Logic
     function handlePasswordNext(e) {
       e.preventDefault();
       const val = passwordInput.value;
 
       if (!val) {
-        setPasswordErrorState(true, "Enter a password");
+        setPassError(true, "Enter a password");
         return;
       }
 
-      // Simulated static password verification
       if (val !== "password" && val !== "secret") {
-        setPasswordErrorState(true, "Wrong password. Try again or click Forgot password to reset it.");
+        setPassError(true, "Wrong password. Try again or click Forgot password to reset it.");
         return;
       }
 
-      setPasswordErrorState(false);
+      setPassError(false);
       loadingBar.classList.remove('hidden');
 
       setTimeout(() => {
         loadingBar.classList.add('hidden');
-        alert("Success! Profile Authenticated via Material 3 Interface Pipeline.");
-      }, 1000);
+        alert("Mock Authentication Successful!");
+      }, 800);
     }
 
-    function setPasswordErrorState(isError, msg = "") {
+    function setPassError(isError, msg = "") {
       if (isError) {
-        passwordContainer.classList.remove('border-[#747775]');
-        passwordContainer.classList.add('border-[#b3261e]', 'border-2');
+        passwordContainer.querySelector('input').classList.remove('border-[#747775]');
+        passwordContainer.querySelector('input').classList.add('border-[#b3261e]');
         passwordLabel.classList.add('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
         document.getElementById('password-error-text').textContent = msg;
         passwordErrorMsg.classList.remove('hidden');
         passwordInput.focus();
       } else {
-        passwordContainer.classList.add('border-[#747775]');
-        passwordContainer.classList.remove('border-[#b3261e]', 'border-2');
+        passwordContainer.querySelector('input').classList.add('border-[#747775]');
+        passwordContainer.querySelector('input').classList.remove('border-[#b3261e]');
         passwordLabel.classList.remove('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
         passwordErrorMsg.classList.add('hidden');
       }
@@ -461,16 +440,18 @@
 
     function returnToEmailStep() {
       loadingBar.classList.remove('hidden');
-      
       setTimeout(() => {
         loadingBar.classList.add('hidden');
-        
         flowTitle.textContent = 'Sign in';
-        flowSubtitle.textContent = 'Use your Google Account';
-        
+        flowSubtitle.classList.remove('hidden');
         sliderTrack.classList.remove('-translate-x-1/2');
+        
+        // Reset password field
+        passwordInput.value = '';
+        setPassError(false);
+        
         setTimeout(() => emailInput.focus(), 400);
-      }, 350);
+      }, 300);
     }
 
     function togglePassVisibility() {
@@ -478,30 +459,21 @@
       passwordInput.type = showCheckbox.checked ? 'text' : 'password';
     }
 
-    // -------------------------------------------------------------
-    // Real-time Caps Lock Detection
-    // -------------------------------------------------------------
-    passwordInput.addEventListener('keyup', function(e) {
-      if (e.getModifierState && e.getModifierState('CapsLock')) {
-        capslockWarning.classList.remove('hidden');
-      } else {
-        capslockWarning.classList.add('hidden');
-      }
+    // Caps Lock Detection
+    passwordInput.addEventListener('keyup', e => {
+      if (e.getModifierState && e.getModifierState('CapsLock')) capslockWarning.classList.remove('hidden');
+      else capslockWarning.classList.add('hidden');
     });
 
-    // -------------------------------------------------------------
-    // Menu Overlay Management Structures
-    // -------------------------------------------------------------
+    // Menus & Dropdowns
     function toggleCreateAccountMenu(e) {
       e.stopPropagation();
-      const menu = document.getElementById('create-account-menu');
-      menu.classList.toggle('hidden');
+      document.getElementById('create-account-menu').classList.toggle('hidden');
     }
 
     function toggleLanguagePicker(e) {
       e.stopPropagation();
-      const menu = document.getElementById('language-picker-menu');
-      menu.classList.toggle('hidden');
+      document.getElementById('language-picker-menu').classList.toggle('hidden');
     }
 
     function setLanguage(lang) {
@@ -509,17 +481,9 @@
       document.getElementById('language-picker-menu').classList.add('hidden');
     }
 
-    // Close open popovers on background clicks
     document.addEventListener('click', () => {
       document.getElementById('create-account-menu').classList.add('hidden');
       document.getElementById('language-picker-menu').classList.add('hidden');
-    });
-
-    // Check caps lock status again if focused
-    passwordInput.addEventListener('focus', function(e) {
-      if (e.getModifierState && e.getModifierState('CapsLock')) {
-        capslockWarning.classList.remove('hidden');
-      }
     });
   </script>
 
