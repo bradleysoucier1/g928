@@ -3,166 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sign-In Menu (Material 3)</title>
+  <title>Sign in - Google Accounts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    /* Google Custom Indeterminate Loading Bar Animation */
+    @keyframes loading-bar {
+      0% { left: -35%; right: 100%; }
+      60% { left: 100%; right: -90%; }
+      100% { left: 100%; right: -90%; }
+    }
+    @keyframes loading-bar-short {
+      0% { left: -200%; right: 100%; }
+      60% { left: 107%; right: -8%; }
+      100% { left: 107%; right: -8%; }
+    }
+    .animate-progress-1 {
+      animation: loading-bar 2s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    }
+    .animate-progress-2 {
+      animation: loading-bar-short 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+      animation-delay: 1.15s;
+    }
+  </style>
 </head>
-<body class="bg-[#f0f4f9]">
+<body class="bg-white md:bg-[#f0f4f9] min-h-screen flex flex-col justify-between antialiased selection:bg-[#c2e7ff]">
 
-  <div class="min-h-screen flex flex-col justify-between p-4 md:p-6 font-sans antialiased">
-    <div class="flex-grow flex items-center justify-center">
+  <div class="flex-grow flex items-start md:items-center justify-center pt-6 sm:pt-12 md:pt-0">
+    
+    <div class="relative w-full max-w-[448px] md:max-w-[848px] bg-white rounded-none md:rounded-[28px] px-6 py-6 sm:px-9 sm:py-9 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-x-12 items-start min-h-auto md:min-h-[440px] overflow-hidden">
       
-      <div class="w-full max-w-[848px] bg-white rounded-[28px] p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start min-h-[440px] shadow-sm">
-        
-        <div class="flex flex-col justify-between h-full">
-          <div>
-            <svg class="h-6 w-auto mb-4" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            
-            <h1 class="text-[32px] font-normal text-[#1f1f1f] tracking-normal leading-10">
-              Sign in
-            </h1>
-            <p class="text-base text-[#1f1f1f] mt-3 font-normal">
-              Use your Google Account
-            </p>
-          </div>
-        </div>
-
-        <div class="w-full overflow-hidden pt-2 md:pt-0">
-          <div id="form-track" class="flex w-[200%] transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]">
-            
-            <div class="w-1/2 pr-4 flex flex-col justify-between h-full">
-              <form id="email-form" class="space-y-2" onsubmit="event.preventDefault(); goToPassword();">
-                
-                <div class="relative w-full">
-                  <input 
-                    type="email" 
-                    id="identifier" 
-                    placeholder=" " 
-                    class="peer w-full px-4 py-[18px] text-base bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-150 focus:border-[#0b57d0] focus:border-2 focus:px-[15px] focus:py-[17px]"
-                    required
-                  />
-                  <label 
-                    for="identifier" 
-                    class="absolute left-3 top-[18px] text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-base
-                           peer-placeholder-shown:top-[18px] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-100
-                           peer-focus:-top-2.5 peer-focus:left-3 peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
-                           peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:scale-[0.75]"
-                  >
-                    Email or phone
-                  </label>
-                </div>
-
-                <div class="pt-1">
-                  <a href="#" class="text-[#0b57d0] text-sm font-semibold tracking-wide hover:underline inline-block">
-                    Forgot email?
-                  </a>
-                </div>
-
-                <div class="text-sm text-[#444746] pt-8 leading-[20px] font-normal">
-                  Not your computer? Use Guest mode to sign in privately.
-                  <a href="#" class="text-[#0b57d0] font-semibold hover:underline inline-block whitespace-nowrap ml-1">
-                    Learn more
-                  </a>
-                </div>
-
-                <div class="flex items-center justify-between pt-10 md:pt-14">
-                  <a href="#" class="text-[#0b57d0] text-sm font-semibold tracking-wide px-3 py-2 -ml-3 rounded-md hover:bg-[#0b57d0]/[0.08] transition duration-150">
-                    Create account
-                  </a>
-                  <button type="submit" class="bg-[#0b57d0] text-white text-sm font-semibold tracking-wide px-6 py-2.5 rounded-full hover:bg-[#0a4ebd] transition duration-150">
-                    Next
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <div class="w-1/2 pl-4 flex flex-col justify-between h-full">
-              <form id="password-form" class="space-y-2" onsubmit="event.preventDefault(); alert('Signed in successfully!');">
-                
-                <div id="identity-pill" onclick="goToEmail()" class="inline-flex items-center gap-2 border border-[#747775]/50 rounded-full pl-2 pr-3 py-1 cursor-pointer hover:bg-black/[0.04] transition text-sm text-[#1f1f1f] mb-4">
-                  <div class="w-5 h-5 flex items-center justify-center text-[#444746]">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-                  </div>
-                  <span id="display-email" class="font-medium">user@gmail.com</span>
-                </div>
-
-                <div class="relative w-full">
-                  <input 
-                    type="password" 
-                    id="password" 
-                    placeholder=" " 
-                    class="peer w-full px-4 py-[18px] text-base bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-150 focus:border-[#0b57d0] focus:border-2 focus:px-[15px] focus:py-[17px]"
-                    required
-                  />
-                  <label 
-                    for="password" 
-                    class="absolute left-3 top-[18px] text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-base
-                           peer-placeholder-shown:top-[18px] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-100
-                           peer-focus:-top-2.5 peer-focus:left-3 peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
-                           peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:scale-[0.75]"
-                  >
-                    Enter your password
-                  </label>
-                </div>
-
-                <div class="flex items-center gap-3 pt-2 pl-1">
-                  <input type="checkbox" id="show-pass" class="w-4 h-4 text-[#0b57d0] border-[#747775] rounded focus:ring-[#0b57d0]" onclick="togglePasswordVisibility()"/>
-                  <label for="show-pass" class="text-sm text-[#1f1f1f] select-none cursor-pointer">Show password</label>
-                </div>
-
-                <div class="flex items-center justify-between pt-16 md:pt-20">
-                  <a href="#" class="text-[#0b57d0] text-sm font-semibold tracking-wide px-3 py-2 -ml-3 rounded-md hover:bg-[#0b57d0]/[0.08] transition duration-150">
-                    Forgot password?
-                  </a>
-                  <button type="submit" class="bg-[#0b57d0] text-white text-sm font-semibold tracking-wide px-6 py-2.5 rounded-full hover:bg-[#0a4ebd] transition duration-150">
-                    Next
-                  </button>
-                </div>
-              </form>
-            </div>
-
-          </div>
-        </div>
-
+      <div id="progress-indicator" class="absolute top-0 left-0 right-0 h-1 bg-[#d3e3fd] overflow-hidden hidden">
+        <div class="absolute top-0 bottom-0 left-0 bg-[#0b57d0] will-change-left animate-progress-1"></div>
+        <div class="absolute top-0 bottom-0 left-0 bg-[#0b57d0] will-change-left animate-progress-2"></div>
       </div>
+
+      <div class="flex flex-col justify-between h-auto md:h-full">
+        <div>
+          <svg class="h-[24px] w-auto mb-4 md:mb-5 tracking-tight" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          
+          <h1 id="main-heading" class="text-[32px] font-normal text-[#1f1f1f] tracking-tight leading-10">
+            Sign in
+          </h1>
+          <p id="sub-heading" class="text-base text-[#1f1f1f] mt-2 font-normal tracking-normal">
+            Use your Google Account
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full overflow-hidden pt-1 md:pt-1">
+        <div id="form-track" class="flex w-[200%] transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)]">
+          
+          <div class="w-1/2 pr-3 md:pr-4 flex flex-col justify-between h-full">
+            <form id="email-form" class="space-y-2" onsubmit="event.preventDefault(); handleEmailSubmit();">
+              
+              <div class="relative w-full">
+                <input 
+                  type="email" 
+                  id="identifier" 
+                  placeholder=" " 
+                  class="peer w-full px-4 py-[16px] text-base bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2 focus:px-[15px] focus:py-[15px]"
+                  required
+                  autocomplete="username"
+                />
+                <label 
+                  for="identifier" 
+                  class="absolute left-3 top-[16px] text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-base
+                         peer-placeholder-shown:top-[16px] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-100
+                         peer-focus:-top-2.5 peer-focus:left-3 peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
+                         peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:scale-[0.75]"
+                >
+                  Email or phone
+                </label>
+              </div>
+
+              <div class="pt-1">
+                <a href="#" class="text-[#0b57d0] text-sm font-medium tracking-normal hover:underline inline-block">
+                  Forgot email?
+                </a>
+              </div>
+
+              <div class="text-sm text-[#444746] pt-7 leading-[20px] font-normal tracking-normal">
+                Not your computer? Use Guest mode to sign in privately.
+                <a href="#" class="text-[#0b57d0] font-medium hover:underline inline-block whitespace-nowrap ml-0.5">
+                  Learn more
+                </a>
+              </div>
+
+              <div class="flex items-center justify-between pt-9 md:pt-12">
+                <a href="#" class="text-[#0b57d0] text-sm font-medium tracking-wide px-3 py-2 -ml-3 rounded-full hover:bg-[#0b57d0]/[0.08] active:bg-[#0b57d0]/[0.12] transition duration-150">
+                  Create account
+                </a>
+                <button type="submit" class="bg-[#0b57d0] text-white text-sm font-medium tracking-wide px-6 py-2.5 rounded-full hover:bg-[#0a4ebd] hover:shadow-sm active:bg-[#083da1] active:shadow-none transition duration-150">
+                  Next
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="w-1/2 pl-3 md:pl-4 flex flex-col justify-between h-full">
+            <form id="password-form" class="space-y-2" onsubmit="event.preventDefault(); handlePasswordSubmit();">
+              
+              <div onclick="returnToEmailStage()" class="inline-flex items-center gap-1.5 border border-[#747775]/40 rounded-full pl-1.5 pr-3 py-1 cursor-pointer hover:bg-black/[0.04] active:bg-black/[0.08] transition text-sm text-[#1f1f1f] mb-6">
+                <div class="w-[18px] h-[18px] flex items-center justify-center text-[#444746]">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </div>
+                <div class="w-4 h-4 rounded-full bg-[#0b57d0]/10 flex items-center justify-center text-xs text-[#0b57d0]">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <span id="display-identity-target" class="font-normal text-[#3c4043]"></span>
+              </div>
+
+              <div class="relative w-full">
+                <input 
+                  type="password" 
+                  id="password" 
+                  placeholder=" " 
+                  class="peer w-full px-4 py-[16px] text-base bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2 focus:px-[15px] focus:py-[15px]"
+                  required
+                  autocomplete="current-password"
+                />
+                <label 
+                  for="password" 
+                  class="absolute left-3 top-[16px] text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-base
+                         peer-placeholder-shown:top-[16px] peer-placeholder-shown:left-4 peer-placeholder-shown:scale-100
+                         peer-focus:-top-2.5 peer-focus:left-3 peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
+                         peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-3 peer-[:not(:placeholder-shown)]:scale-[0.75]"
+                >
+                  Enter your password
+                </label>
+              </div>
+
+              <div class="flex items-center gap-3 pt-2 pl-0.5 select-none">
+                <input 
+                  type="checkbox" 
+                  id="show-pass" 
+                  class="w-[18px] h-[18px] rounded border-[#747775] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer" 
+                  onclick="toggleInputVisibility()"
+                />
+                <label for="show-pass" class="text-sm font-normal text-[#1f1f1f] cursor-pointer">Show password</label>
+              </div>
+
+              <div class="flex items-center justify-between pt-12 md:pt-[76px]">
+                <a href="#" class="text-[#0b57d0] text-sm font-medium tracking-wide px-3 py-2 -ml-3 rounded-full hover:bg-[#0b57d0]/[0.08] active:bg-[#0b57d0]/[0.12] transition duration-150">
+                  Forgot password?
+                </a>
+                <button type="submit" class="bg-[#0b57d0] text-white text-sm font-medium tracking-wide px-6 py-2.5 rounded-full hover:bg-[#0a4ebd] hover:shadow-sm active:bg-[#083da1] active:shadow-none transition duration-150">
+                  Next
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
     </div>
-
-    <footer class="w-full max-w-[848px] mx-auto flex flex-col sm:flex-row justify-between items-center text-xs text-[#444746] py-4 gap-4 px-2">
-      <div class="flex items-center gap-1 cursor-pointer hover:bg-black/[0.04] p-2 rounded-md transition">
-        <span>English (United States)</span>
-        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-      </div>
-      <div class="flex gap-6">
-        <a href="#" class="hover:underline p-1">Help</a>
-        <a href="#" class="hover:underline p-1">Privacy</a>
-        <a href="#" class="hover:underline p-1">Terms</a>
-      </div>
-    </footer>
   </div>
+
+  <footer class="w-full max-w-[448px] md:max-w-[848px] mx-auto flex flex-col sm:flex-row justify-between items-center text-xs text-[#444746] pb-4 pt-6 md:py-6 gap-4 px-6 md:px-2">
+    <div class="flex items-center gap-1 cursor-pointer hover:bg-black/[0.04] py-1.5 px-2.5 -ml-2.5 rounded-md transition select-none text-[#1f1f1f]">
+      <span>English (United States)</span>
+      <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+    </div>
+    <div class="flex gap-4 sm:gap-6 text-[#444746] font-normal tracking-wide">
+      <a href="#" class="hover:underline py-1">Help</a>
+      <a href="#" class="hover:underline py-1">Privacy</a>
+      <a href="#" class="hover:underline py-1">Terms</a>
+    </div>
+  </footer>
 
   <script>
     const track = document.getElementById('form-track');
+    const loadingBar = document.getElementById('progress-indicator');
+    const mainHeading = document.getElementById('main-heading');
+    const subHeading = document.getElementById('sub-heading');
+    
     const emailInput = document.getElementById('identifier');
-    const displayEmail = document.getElementById('display-email');
+    const displayEmail = document.getElementById('display-identity-target');
     const passwordInput = document.getElementById('password');
 
-    function goToPassword() {
-      displayEmail.textContent = emailInput.value || 'user@gmail.com';
-      track.classList.add('-translate-x-1/2');
-      setTimeout(() => passwordInput.focus(), 400);
+    function handleEmailSubmit() {
+      // Show thin loading progress row line
+      loadingBar.classList.remove('hidden');
+      
+      // Simulate Google server handshake latency delay buffer
+      setTimeout(() => {
+        loadingBar.classList.add('hidden');
+        
+        // Pass identity configuration mapping context data values
+        displayEmail.textContent = emailInput.value;
+        
+        // Mutate headings dynamically to reflect authentication stack changes
+        mainHeading.textContent = 'Welcome';
+        subHeading.textContent = '';
+        
+        // Transform view node coordinate tracks
+        track.classList.add('-translate-x-1/2');
+        
+        // Focus the input targeted field element
+        setTimeout(() => passwordInput.focus(), 350);
+      }, 700);
     }
 
-    function goToEmail() {
-      track.classList.remove('-translate-x-1/2');
-      setTimeout(() => emailInput.focus(), 400);
+    function returnToEmailStage() {
+      loadingBar.classList.remove('hidden');
+      
+      setTimeout(() => {
+        loadingBar.classList.add('hidden');
+        
+        // Rollback text structures to origin vectors
+        mainHeading.textContent = 'Sign in';
+        subHeading.textContent = 'Use your Google Account';
+        
+        track.classList.remove('-translate-x-1/2');
+        setTimeout(() => emailInput.focus(), 350);
+      }, 400);
     }
 
-    function togglePasswordVisibility() {
-      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    function toggleInputVisibility() {
+      const showCheckbox = document.getElementById('show-pass');
+      passwordInput.type = showCheckbox.checked ? 'text' : 'password';
+    }
+
+    function handlePasswordSubmit() {
+      loadingBar.classList.remove('hidden');
+      setTimeout(() => {
+        loadingBar.classList.add('hidden');
+        alert('Successfully authenticated identity token block template pipeline.');
+      }, 1200);
     }
   </script>
 
