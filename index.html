@@ -1,493 +1,578 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in - Google Accounts</title>
-  <!-- Load Google Roboto Font Engine -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS Engine -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --g-blue:   #4285F4;
+      --g-red:    #EA4335;
+      --g-yellow: #FBBC05;
+      --g-green:  #34A853;
+      --text:     #202124;
+      --muted:    #5f6368;
+      --border:   #e0e0e0;
+      --hover:    #f1f3f4;
+      --link:     #1a73e8;
+    }
+
     body {
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    }
-    
-    /* Chrome Auto-fill Override to prevent background color changes */
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover, 
-    input:-webkit-autofill:focus, 
-    input:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 50px white inset !important;
-        -webkit-text-fill-color: #1f1f1f !important;
-        transition: background-color 5000s ease-in-out 0s;
-    }
-
-    /* M3 Linear Progress Bar Animation */
-    @keyframes progress-primary {
-      0% { left: -35%; right: 100%; }
-      60% { left: 100%; right: -90%; }
-      100% { left: 100%; right: -90%; }
-    }
-    @keyframes progress-secondary {
-      0% { left: -200%; right: 100%; }
-      60% { left: 107%; right: -8%; }
-      100% { left: 107%; right: -8%; }
-    }
-    .animate-progress-1 {
-      animation: progress-primary 2s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
-    }
-    .animate-progress-2 {
-      animation: progress-secondary 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-      animation-delay: 1.15s;
-    }
-
-    /* Material Ripple Setup */
-    .ripple-target {
-      position: relative;
+      font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #fff;
+      min-height: 100vh;
       overflow: hidden;
     }
-    .ripple-element {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(11, 87, 208, 0.12); /* Google Blue ripple */
-      transform: scale(0);
-      animation: ripple-drop 0.4s linear;
-      pointer-events: none;
-    }
-    .ripple-white .ripple-element {
-      background: rgba(255, 255, 255, 0.25);
-    }
-    @keyframes ripple-drop {
-      100% {
-        transform: scale(4);
-        opacity: 0;
-      }
+
+    /* ─────────────────────────────────────────
+       SIMULATED GOOGLE HOMEPAGE BACKGROUND
+    ───────────────────────────────────────── */
+    .g-page {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Custom Input Border Fix for Webkit */
-    .m3-input:focus {
-        padding: 15px; /* Offset the 2px border visually to prevent layout shift */
+    /* Top-right navigation bar */
+    .g-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 8px 14px;
+      gap: 4px;
+      flex-shrink: 0;
     }
+
+    .g-nav-link {
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 4px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    .g-nav-link:hover { background: var(--hover); }
+
+    .g-nav-sep {
+      width: 1px;
+      height: 16px;
+      background: #dadce0;
+      margin: 0 6px;
+      flex-shrink: 0;
+    }
+
+    .g-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .g-icon-btn:hover { background: var(--hover); }
+
+    .g-avatar-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--link);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+
+    /* Centered page content */
+    .g-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 100px;
+      gap: 26px;
+    }
+
+    .g-logo {
+      font-size: 92px;
+      font-weight: 400;
+      letter-spacing: -2px;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .c-b { color: var(--g-blue); }
+    .c-r { color: var(--g-red); }
+    .c-y { color: var(--g-yellow); }
+    .c-g { color: var(--g-green); }
+
+    .g-search-box {
+      display: flex;
+      align-items: center;
+      width: 544px;
+      max-width: calc(100vw - 32px);
+      border: 1px solid #dfe1e5;
+      border-radius: 24px;
+      padding: 11px 14px;
+      gap: 10px;
+      background: #fff;
+      cursor: text;
+      transition: box-shadow 0.1s, border-color 0.1s;
+    }
+    .g-search-box:hover {
+      box-shadow: 0 1px 6px rgba(32,33,36,.28);
+      border-color: transparent;
+    }
+    .g-search-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 16px;
+      color: var(--text);
+      background: transparent;
+      font-family: inherit;
+      min-width: 0;
+    }
+    .g-search-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .g-search-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .g-btns {
+      display: flex;
+      gap: 12px;
+    }
+    .g-btn {
+      background: #f8f9fa;
+      border: 1px solid #f8f9fa;
+      border-radius: 4px;
+      padding: 9px 20px;
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .g-btn:hover {
+      border-color: var(--border);
+      box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    }
+
+    /* ─────────────────────────────────────────
+       ACCOUNT MENU POPUP
+    ───────────────────────────────────────── */
+    .mc-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+    }
+    .mc-overlay.hidden { display: none; }
+
+    .mc {
+      position: absolute;
+      top: 60px;
+      right: 8px;
+      width: 360px;
+      background: #fff;
+      border-radius: 28px;
+      box-shadow:
+        0 1px 2px rgba(60,64,67,.3),
+        0 2px 6px 2px rgba(60,64,67,.15);
+      overflow: hidden;
+      animation: mc-appear 0.2s cubic-bezier(0.2,0,0,1.2);
+      transform-origin: top right;
+      font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    @keyframes mc-appear {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Card header ── */
+    .mc-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 8px 10px 20px;
+    }
+    .mc-wordmark {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+      line-height: 1;
+      user-select: none;
+    }
+    .mc-close-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mc-close-btn:hover { background: var(--hover); }
+
+    /* ── Primary account ── */
+    .mc-primary {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2px 24px 22px;
+    }
+    .mc-avatar-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--link);
+      color: #fff;
+      font-size: 30px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .mc-pname {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+      text-align: center;
+      line-height: 24px;
+    }
+    .mc-pemail {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      text-align: center;
+      line-height: 20px;
+    }
+    .mc-manage-btn {
+      border: 1px solid #dadce0;
+      border-radius: 24px;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--link);
+      background: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      line-height: 20px;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .mc-manage-btn:hover { background: #e8f0fe; border-color: #c6d8fc; }
+
+    /* ── Divider ── */
+    .mc-hr { height: 1px; background: var(--border); }
+
+    /* ── Account list ── */
+    .mc-accts { padding: 4px 0; }
+
+    .mc-acct-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      gap: 16px;
+      cursor: pointer;
+      min-height: 56px;
+      transition: background 0.1s;
+    }
+    .mc-acct-row:hover { background: var(--hover); }
+
+    .mc-avatar-sm {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .av-blue   { background: #1a73e8; }
+    .av-green  { background: #1e8e3e; }
+    .av-red    { background: #d93025; }
+    .av-purple { background: #9334e6; }
+
+    .mc-acct-info { flex: 1; min-width: 0; }
+    .mc-acct-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mc-acct-email {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mc-check { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* ── Action rows ── */
+    .mc-actions { padding: 4px 0; }
+    .mc-action {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 16px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .mc-action:hover { background: var(--hover); }
+    .mc-action-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mc-action-label {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 20px;
+    }
+
+    /* ── Footer ── */
+    .mc-foot {
+      padding: 14px 16px 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 18px;
+    }
+    .mc-foot a { color: var(--muted); text-decoration: none; }
+    .mc-foot a:hover { text-decoration: underline; }
+    .mc-foot-sep { margin: 0 4px; }
   </style>
 </head>
-<body class="bg-white md:bg-[#f0f4f9] min-h-screen flex flex-col justify-between antialiased selection:bg-[#c2e7ff] text-[#1f1f1f]">
+<body>
 
-  <!-- Main Viewport Centering -->
-  <div class="flex-grow flex items-start md:items-center justify-center pt-8 sm:pt-12 md:pt-0 pb-8 px-0 sm:px-6">
-    
-    <!-- Material 3 Surface Card -->
-    <!-- Exact dimensions: 1040px max-width on large desktop, 28px radius -->
-    <div class="relative w-full max-w-[448px] lg:max-w-[1040px] bg-white rounded-none md:rounded-[28px] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12 grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-x-12 items-start min-h-auto lg:min-h-[400px] overflow-hidden md:overflow-visible shadow-none">
-      
-      <!-- Top Loading Indicator -->
-      <div id="loading-bar" class="absolute top-0 left-0 right-0 h-1 bg-[#d3e3fd] overflow-hidden rounded-t-none md:rounded-t-[28px] hidden z-10">
-        <div class="absolute top-0 bottom-0 left-0 bg-[#0b57d0] will-change-left animate-progress-1"></div>
-        <div class="absolute top-0 bottom-0 left-0 bg-[#0b57d0] will-change-left animate-progress-2"></div>
-      </div>
+<!-- ═══════════════════════════════
+     SIMULATED GOOGLE HOMEPAGE
+═══════════════════════════════ -->
+<div class="g-page">
 
-      <!-- Left Column: Branding -->
-      <div class="flex flex-col justify-between h-auto lg:h-full lg:pr-10">
-        <div>
-          <!-- Exact Google Logo Paths & Colors -->
-          <svg class="h-[24px] w-auto mb-4 md:mb-5 select-none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/>
-            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+  <!-- Top-right nav -->
+  <nav class="g-nav" aria-label="Site navigation">
+    <a class="g-nav-link" href="#">Gmail</a>
+    <a class="g-nav-link" href="#">Images</a>
+
+    <!-- Apps / waffle icon -->
+    <button class="g-icon-btn" aria-label="Google apps">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="#5f6368">
+        <path d="M6 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM6 14c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM6 20c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+      </svg>
+    </button>
+
+    <!-- Account avatar button — click to toggle menu -->
+    <button class="g-avatar-btn" aria-label="Google Account: Jane Doe" onclick="openMenu()">J</button>
+  </nav>
+
+  <!-- Center body -->
+  <div class="g-body">
+    <div class="g-logo" aria-label="Google">
+      <span class="c-b">G</span><span class="c-r">o</span><span class="c-y">o</span><span class="c-b">g</span><span class="c-g">l</span><span class="c-r">e</span>
+    </div>
+
+    <div class="g-search-box" role="search">
+      <!-- Search magnifying glass -->
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="#9aa0a6" aria-hidden="true">
+        <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+
+      <input type="text" aria-label="Search" placeholder="Search Google or type a URL" />
+
+      <div class="g-search-icons">
+        <!-- Voice search -->
+        <button class="g-search-icon-btn" aria-label="Search by voice">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#4285f4">
+            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
           </svg>
-          
-          <!-- Exact M3 Typography Scale -->
-          <h1 id="flow-title" class="text-[36px] font-normal text-[#1f1f1f] leading-[44px] -tracking-[0.02em]">
-            Sign in
-          </h1>
-          <p id="flow-subtitle" class="text-base text-[#1f1f1f] mt-3 font-normal leading-6">
-            Use your Google Account
-          </p>
-        </div>
+        </button>
+        <!-- Google Lens -->
+        <button class="g-search-icon-btn" aria-label="Search by image">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+            <path d="M9 2H4C2.9 2 2 2.9 2 4v5h2V4h5V2zm11 2c0-1.1-.9-2-2-2h-5v2h5v5h2V4zM4 20h5v2H4c-1.1 0-2-.9-2-2v-5h2v5zm16-5v5h-5v2h5c1.1 0 2-.9 2-2v-5h-2z" fill="#4285f4"/>
+          </svg>
+        </button>
       </div>
+    </div>
 
-      <!-- Right Column: Interactive Track -->
-      <div class="w-full relative lg:pt-2">
-        <div class="overflow-hidden p-1 -m-1"> <!-- Padding prevents focus ring clipping -->
-          <div id="slider-track" class="flex w-[200%] transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]">
-            
-            <!-- ====== SLIDE 1: IDENTIFIER ====== -->
-            <div class="w-1/2 pr-2 flex flex-col justify-between h-full">
-              <form id="email-step-form" onsubmit="handleEmailNext(event);">
-                
-                <div class="relative w-full" id="email-field-container">
-                  <input 
-                    type="text" 
-                    id="email-input" 
-                    placeholder=" " 
-                    class="m3-input peer w-full px-4 py-4 h-[56px] text-[16px] bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2"
-                    autocomplete="username"
-                  />
-                  <!-- Floating Label Background Mask Technique -->
-                  <label 
-                    for="email-input" 
-                    id="email-label"
-                    class="absolute left-3 top-4 text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-[16px]
-                           peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100
-                           peer-focus:-translate-y-[26px] peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
-                           peer-[:not(:placeholder-shown)]:-translate-y-[26px] peer-[:not(:placeholder-shown)]:scale-[0.75]"
-                  >
-                    Email or phone
-                  </label>
-                </div>
-                
-                <!-- Error Message Container -->
-                <div id="email-error-msg" class="text-[12px] text-[#b3261e] flex items-start gap-2 hidden mt-2">
-                  <svg class="w-4 h-4 flex-shrink-0 mt-[2px]" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                  </svg>
-                  <span id="error-text" class="leading-[20px]">Enter an email or phone number</span>
-                </div>
-
-                <div class="pt-2">
-                  <a href="#" class="text-[#0b57d0] text-sm font-medium hover:bg-blue-50 py-1.5 px-2 -ml-2 rounded transition-colors inline-block">
-                    Forgot email?
-                  </a>
-                </div>
-
-                <div class="text-[14px] text-[#444746] pt-10 leading-[20px] font-normal">
-                  Not your computer? Use Guest mode to sign in privately.
-                  <a href="#" class="text-[#0b57d0] font-medium hover:bg-blue-50 py-1 px-1.5 -ml-1 rounded transition-colors inline-block whitespace-nowrap">
-                    Learn more
-                  </a>
-                </div>
-
-                <!-- Footer Actions -->
-                <div class="flex items-center justify-between pt-10 relative">
-                  <div>
-                    <button 
-                      type="button" 
-                      id="create-account-btn"
-                      onclick="toggleCreateAccountMenu(event)"
-                      class="ripple-target text-[#0b57d0] text-[14px] font-medium tracking-[0.1px] px-3 py-[9px] -ml-3 rounded-[20px] hover:bg-[#0b57d0]/[0.08] transition duration-150"
-                    >
-                      Create account
-                    </button>
-                    <!-- Floating M3 Menu -->
-                    <div id="create-account-menu" class="absolute left-0 bottom-[52px] w-[230px] bg-white rounded-[8px] shadow-[0_4px_14px_rgba(0,0,0,0.15),0_0_2px_rgba(0,0,0,0.1)] py-2 hidden z-50">
-                      <button type="button" class="w-full text-left px-4 py-[10px] text-[14px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">For my personal use</button>
-                      <button type="button" class="w-full text-left px-4 py-[10px] text-[14px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">For my child</button>
-                      <button type="button" class="w-full text-left px-4 py-[10px] text-[14px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">For work or my business</button>
-                    </div>
-                  </div>
-
-                  <button 
-                    type="submit" 
-                    class="ripple-target ripple-white bg-[#0b57d0] text-white text-[14px] font-medium tracking-[0.1px] px-6 h-[40px] rounded-full hover:bg-[#0a4ebd] hover:shadow-md transition duration-150"
-                  >
-                    Next
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- ====== SLIDE 2: PASSWORD ====== -->
-            <div class="w-1/2 pl-2 flex flex-col justify-between h-full">
-              <form id="password-step-form" onsubmit="handlePasswordNext(event);">
-                
-                <!-- Identity Pill -->
-                <div onclick="returnToEmailStep()" class="inline-flex items-center gap-2 border border-[#747775]/40 rounded-full pl-[5px] pr-3 py-[5px] cursor-pointer hover:bg-[#1f1f1f]/[0.04] transition text-[14px] text-[#1f1f1f] mb-6 shadow-sm hover:shadow-none">
-                  <div id="user-avatar-badge" class="w-[20px] h-[20px] rounded-full flex items-center justify-center text-[11px] font-medium text-white bg-[#0b57d0]">
-                    U
-                  </div>
-                  <span id="identity-display" class="font-normal text-[#3c4043]"></span>
-                  <div class="w-4 h-4 flex items-center justify-center text-[#444746]">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                    </svg>
-                  </div>
-                </div>
-
-                <div class="relative w-full" id="pass-field-container">
-                  <input 
-                    type="password" 
-                    id="password-input" 
-                    placeholder=" " 
-                    class="m3-input peer w-full px-4 py-4 h-[56px] text-[16px] bg-transparent text-[#1f1f1f] border border-[#747775] rounded-[4px] outline-none transition-all duration-100 focus:border-[#0b57d0] focus:border-2"
-                    autocomplete="current-password"
-                  />
-                  <label 
-                    for="password-input" 
-                    id="password-label"
-                    class="absolute left-3 top-4 text-[#444746] bg-white px-1 transform origin-left transition-all duration-150 pointer-events-none text-[16px]
-                           peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100
-                           peer-focus:-translate-y-[26px] peer-focus:scale-[0.75] peer-focus:text-[#0b57d0] peer-focus:font-medium
-                           peer-[:not(:placeholder-shown)]:-translate-y-[26px] peer-[:not(:placeholder-shown)]:scale-[0.75]"
-                  >
-                    Enter your password
-                  </label>
-                </div>
-                
-                <div id="password-error-msg" class="text-[12px] text-[#b3261e] flex items-start gap-2 hidden mt-2">
-                  <svg class="w-4 h-4 flex-shrink-0 mt-[2px]" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                  </svg>
-                  <span id="password-error-text" class="leading-[20px]">Wrong password. Try again or click Forgot password to reset it.</span>
-                </div>
-
-                <div id="capslock-warning" class="text-[12px] text-[#e06000] flex items-center gap-2 hidden mt-1">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                  </svg>
-                  <span>Caps Lock is on</span>
-                </div>
-
-                <!-- Custom M3 Checkbox -->
-                <div class="flex items-center gap-3 pt-3 pl-0.5">
-                  <input 
-                    type="checkbox" 
-                    id="show-pass-toggle" 
-                    class="w-[18px] h-[18px] rounded-[2px] border-[2px] border-[#444746] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer" 
-                    onclick="togglePassVisibility()"
-                  />
-                  <label for="show-pass-toggle" class="text-[14px] font-normal text-[#1f1f1f] cursor-pointer select-none">Show password</label>
-                </div>
-
-                <div class="flex items-center justify-between pt-16">
-                  <a href="#" class="ripple-target text-[#0b57d0] text-[14px] font-medium tracking-[0.1px] px-3 py-[9px] -ml-3 rounded-[20px] hover:bg-[#0b57d0]/[0.08] transition duration-150">
-                    Forgot password?
-                  </a>
-                  <button 
-                    type="submit" 
-                    class="ripple-target ripple-white bg-[#0b57d0] text-white text-[14px] font-medium tracking-[0.1px] px-6 h-[40px] rounded-full hover:bg-[#0a4ebd] hover:shadow-md transition duration-150"
-                  >
-                    Next
-                  </button>
-                </div>
-              </form>
-            </div>
-
-          </div>
-        </div>
-      </div>
+    <div class="g-btns">
+      <button class="g-btn">Google Search</button>
+      <button class="g-btn">I'm Feeling Lucky</button>
     </div>
   </div>
+</div>
 
-  <!-- Global Footer -->
-  <!-- Constrains to exact max width of the card -->
-  <footer class="w-full max-w-[448px] lg:max-w-[1040px] mx-auto flex flex-col sm:flex-row justify-between items-center text-[12px] text-[#444746] pb-4 pt-4 md:py-6 gap-4 px-6 md:px-6 relative bg-transparent">
-    
-    <div class="relative w-full sm:w-auto flex justify-center sm:block">
-      <button 
-        type="button"
-        onclick="toggleLanguagePicker(event)" 
-        class="flex items-center gap-[6px] cursor-pointer hover:bg-black/[0.04] py-1.5 px-2 -ml-2 rounded transition select-none"
-      >
-        <span id="active-lang">English (United States)</span>
-        <svg class="w-[18px] h-[18px] text-[#444746]" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M7 10l5 5 5-5z"/>
+
+<!-- ═══════════════════════════════
+     GOOGLE ACCOUNT MENU POPUP
+═══════════════════════════════ -->
+<div class="mc-overlay hidden" id="mcOverlay" onclick="handleOverlayClick(event)" role="dialog" aria-modal="true" aria-label="Google Account">
+  <div class="mc" id="mcCard">
+
+    <!-- Header: Google wordmark + close -->
+    <div class="mc-head">
+      <div class="mc-wordmark" aria-hidden="true">
+        <span class="c-b">G</span><span class="c-r">o</span><span class="c-y">o</span><span class="c-b">g</span><span class="c-g">l</span><span class="c-r">e</span>
+      </div>
+      <button class="mc-close-btn" onclick="closeMenu()" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="#5f6368">
+          <path d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"/>
         </svg>
       </button>
+    </div>
 
-      <!-- Language Selector -->
-      <div id="language-picker-menu" class="absolute left-1/2 sm:left-0 transform -translate-x-1/2 sm:translate-x-0 bottom-10 mb-1 w-[220px] bg-white rounded-[8px] shadow-[0_4px_14px_rgba(0,0,0,0.15),0_0_2px_rgba(0,0,0,0.1)] max-h-[220px] overflow-y-auto py-1 hidden z-50">
-        <button onclick="setLanguage('English (United States)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">English (United States)</button>
-        <button onclick="setLanguage('Español (España)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">Español (España)</button>
-        <button onclick="setLanguage('Français (France)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">Français (France)</button>
-        <button onclick="setLanguage('Deutsch (Deutschland)')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">Deutsch (Deutschland)</button>
-        <button onclick="setLanguage('日本語')" class="w-full text-left px-4 py-2 text-[13px] text-[#1f1f1f] hover:bg-[#f3f4f6] transition">日本語</button>
+    <!-- Primary / active account -->
+    <div class="mc-primary">
+      <div class="mc-avatar-lg" aria-hidden="true">J</div>
+      <div class="mc-pname">Jane Doe</div>
+      <div class="mc-pemail">janedoe@gmail.com</div>
+      <button class="mc-manage-btn">Manage your Google Account</button>
+    </div>
+
+    <div class="mc-hr" role="separator"></div>
+
+    <!-- All signed-in accounts -->
+    <div class="mc-accts" role="list">
+
+      <!-- Active account row (has checkmark) -->
+      <div class="mc-acct-row" role="listitem" tabindex="0">
+        <div class="mc-avatar-sm av-blue" aria-hidden="true">J</div>
+        <div class="mc-acct-info">
+          <div class="mc-acct-name">Jane Doe</div>
+          <div class="mc-acct-email">janedoe@gmail.com</div>
+        </div>
+        <!-- Checkmark: indicates currently active account -->
+        <svg class="mc-check" viewBox="0 0 24 24" fill="#1a73e8" aria-label="Currently active">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+      </div>
+
+      <!-- Second account row -->
+      <div class="mc-acct-row" role="listitem" tabindex="0">
+        <div class="mc-avatar-sm av-green" aria-hidden="true">J</div>
+        <div class="mc-acct-info">
+          <div class="mc-acct-name">Jane (Work)</div>
+          <div class="mc-acct-email">j.doe@acmecorp.com</div>
+        </div>
       </div>
     </div>
 
-    <div class="flex gap-6 text-[#444746] font-normal tracking-[0.1px]">
-      <a href="#" class="hover:bg-black/[0.04] py-1 px-1.5 -mx-1.5 rounded transition">Help</a>
-      <a href="#" class="hover:bg-black/[0.04] py-1 px-1.5 -mx-1.5 rounded transition">Privacy</a>
-      <a href="#" class="hover:bg-black/[0.04] py-1 px-1.5 -mx-1.5 rounded transition">Terms</a>
+    <div class="mc-hr" role="separator"></div>
+
+    <!-- Actions -->
+    <div class="mc-actions" role="list">
+
+      <!-- Add another account -->
+      <div class="mc-action" role="listitem" tabindex="0">
+        <div class="mc-action-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#5f6368">
+            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <span class="mc-action-label">Add another account</span>
+      </div>
+
+      <!-- Sign out -->
+      <div class="mc-action" role="listitem" tabindex="0">
+        <div class="mc-action-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#5f6368">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+          </svg>
+        </div>
+        <span class="mc-action-label">Sign out of all accounts</span>
+      </div>
     </div>
-  </footer>
 
-  <script>
-    const sliderTrack = document.getElementById('slider-track');
-    const loadingBar = document.getElementById('loading-bar');
-    const flowTitle = document.getElementById('flow-title');
-    const flowSubtitle = document.getElementById('flow-subtitle');
-    
-    // Core nodes
-    const emailInput = document.getElementById('email-input');
-    const emailContainer = document.getElementById('email-field-container');
-    const emailLabel = document.getElementById('email-label');
-    const emailErrorMsg = document.getElementById('email-error-msg');
-    
-    const passwordInput = document.getElementById('password-input');
-    const passwordContainer = document.getElementById('pass-field-container');
-    const passwordLabel = document.getElementById('password-label');
-    const passwordErrorMsg = document.getElementById('password-error-msg');
-    
-    // Profile Assets
-    const capslockWarning = document.getElementById('capslock-warning');
-    const identityDisplay = document.getElementById('identity-display');
-    const userAvatarBadge = document.getElementById('user-avatar-badge');
-    const materialAvatarColors = ['#0b57d0', '#0f9d58', '#f4b400', '#db4437', '#673ab7', '#0097a7'];
+    <div class="mc-hr" role="separator"></div>
 
-    // 1. Material Ripple Injector
-    document.querySelectorAll('.ripple-target').forEach(btn => {
-      btn.addEventListener('mousedown', function(e) {
-        const rect = this.getBoundingClientRect();
-        const ripple = document.createElement('span');
-        const diameter = Math.max(rect.width, rect.height);
-        
-        ripple.style.width = ripple.style.height = `${diameter}px`;
-        ripple.style.left = `${e.clientX - rect.left - diameter / 2}px`;
-        ripple.style.top = `${e.clientY - rect.top - diameter / 2}px`;
-        ripple.classList.add('ripple-element');
-        
-        this.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 400);
-      });
-    });
+    <!-- Footer -->
+    <div class="mc-foot">
+      <a href="#">Privacy Policy</a>
+      <span class="mc-foot-sep" aria-hidden="true">·</span>
+      <a href="#">Terms of Service</a>
+    </div>
 
-    // 2. Email Verification Logic
-    function handleEmailNext(e) {
-      e.preventDefault();
-      const val = emailInput.value.trim();
+  </div><!-- /mc -->
+</div><!-- /mc-overlay -->
 
-      if (!val) {
-        setEmailError(true, "Enter an email or phone number");
-        return;
-      }
-      
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phonePattern = /^\+?[0-9]{7,15}$/;
-      if (!emailPattern.test(val) && !phonePattern.test(val)) {
-        setEmailError(true, "Couldn't find your Google Account");
-        return;
-      }
 
-      setEmailError(false);
-      loadingBar.classList.remove('hidden');
+<script>
+  const overlay = document.getElementById('mcOverlay');
+  const card    = document.getElementById('mcCard');
 
-      setTimeout(() => {
-        loadingBar.classList.add('hidden');
-        identityDisplay.textContent = val;
-        
-        const randomColor = materialAvatarColors[Math.floor(Math.random() * materialAvatarColors.length)];
-        userAvatarBadge.style.backgroundColor = randomColor;
-        userAvatarBadge.textContent = val.charAt(0).toUpperCase();
+  function openMenu() {
+    overlay.classList.remove('hidden');
+    // Restart entrance animation on re-open
+    card.style.animation = 'none';
+    void card.offsetWidth; // force reflow
+    card.style.animation  = '';
+  }
 
-        flowTitle.textContent = 'Welcome';
-        flowSubtitle.classList.add('hidden');
-        
-        sliderTrack.classList.add('-translate-x-1/2');
-        setTimeout(() => passwordInput.focus(), 400);
-      }, 600);
-    }
+  function closeMenu() {
+    overlay.classList.add('hidden');
+  }
 
-    function setEmailError(isError, msg = "") {
-      if (isError) {
-        emailContainer.querySelector('input').classList.remove('border-[#747775]');
-        emailContainer.querySelector('input').classList.add('border-[#b3261e]');
-        emailLabel.classList.add('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
-        document.getElementById('error-text').textContent = msg;
-        emailErrorMsg.classList.remove('hidden');
-        emailInput.focus();
-      } else {
-        emailContainer.querySelector('input').classList.add('border-[#747775]');
-        emailContainer.querySelector('input').classList.remove('border-[#b3261e]');
-        emailLabel.classList.remove('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
-        emailErrorMsg.classList.add('hidden');
-      }
-    }
+  function handleOverlayClick(e) {
+    // Close only when the dimless overlay itself is clicked (not the card)
+    if (e.target === overlay) closeMenu();
+  }
 
-    // 3. Password Logic
-    function handlePasswordNext(e) {
-      e.preventDefault();
-      const val = passwordInput.value;
+  // Keyboard: Escape closes the menu
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closeMenu();
+  });
 
-      if (!val) {
-        setPassError(true, "Enter a password");
-        return;
-      }
-
-      if (val !== "password" && val !== "secret") {
-        setPassError(true, "Wrong password. Try again or click Forgot password to reset it.");
-        return;
-      }
-
-      setPassError(false);
-      loadingBar.classList.remove('hidden');
-
-      setTimeout(() => {
-        loadingBar.classList.add('hidden');
-        alert("Mock Authentication Successful!");
-      }, 800);
-    }
-
-    function setPassError(isError, msg = "") {
-      if (isError) {
-        passwordContainer.querySelector('input').classList.remove('border-[#747775]');
-        passwordContainer.querySelector('input').classList.add('border-[#b3261e]');
-        passwordLabel.classList.add('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
-        document.getElementById('password-error-text').textContent = msg;
-        passwordErrorMsg.classList.remove('hidden');
-        passwordInput.focus();
-      } else {
-        passwordContainer.querySelector('input').classList.add('border-[#747775]');
-        passwordContainer.querySelector('input').classList.remove('border-[#b3261e]');
-        passwordLabel.classList.remove('text-[#b3261e]', 'peer-focus:text-[#b3261e]');
-        passwordErrorMsg.classList.add('hidden');
-      }
-    }
-
-    function returnToEmailStep() {
-      loadingBar.classList.remove('hidden');
-      setTimeout(() => {
-        loadingBar.classList.add('hidden');
-        flowTitle.textContent = 'Sign in';
-        flowSubtitle.classList.remove('hidden');
-        sliderTrack.classList.remove('-translate-x-1/2');
-        
-        // Reset password field
-        passwordInput.value = '';
-        setPassError(false);
-        
-        setTimeout(() => emailInput.focus(), 400);
-      }, 300);
-    }
-
-    function togglePassVisibility() {
-      const showCheckbox = document.getElementById('show-pass-toggle');
-      passwordInput.type = showCheckbox.checked ? 'text' : 'password';
-    }
-
-    // Caps Lock Detection
-    passwordInput.addEventListener('keyup', e => {
-      if (e.getModifierState && e.getModifierState('CapsLock')) capslockWarning.classList.remove('hidden');
-      else capslockWarning.classList.add('hidden');
-    });
-
-    // Menus & Dropdowns
-    function toggleCreateAccountMenu(e) {
-      e.stopPropagation();
-      document.getElementById('create-account-menu').classList.toggle('hidden');
-    }
-
-    function toggleLanguagePicker(e) {
-      e.stopPropagation();
-      document.getElementById('language-picker-menu').classList.toggle('hidden');
-    }
-
-    function setLanguage(lang) {
-      document.getElementById('active-lang').textContent = lang;
-      document.getElementById('language-picker-menu').classList.add('hidden');
-    }
-
-    document.addEventListener('click', () => {
-      document.getElementById('create-account-menu').classList.add('hidden');
-      document.getElementById('language-picker-menu').classList.add('hidden');
-    });
-  </script>
-
+  // Show the menu on page load so the replica is immediately visible
+  window.addEventListener('DOMContentLoaded', openMenu);
+</script>
 </body>
 </html>
-
-```
